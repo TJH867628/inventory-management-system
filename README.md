@@ -1,66 +1,135 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+Here’s a README template for your Laravel + Vue.js-based inventory management system:
+
+ApexOre Inventory Management System
+
+A robust inventory management solution designed for global enterprises, built with Laravel and Vue.js. This system enables seamless tracking of items across multiple locations, including headquarters, fair booths, and between employees. The system supports barcode scanning, manual input, item registration, movement, and reporting.
 
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+    <a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a>
 </p>
 
-## About Laravel
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Features
+	•	Item Registration: Admin and Inventory Keepers can add new items with details like Name, Category, M.A.C / Serial Number, Quantity, and Location.
+	•	Item Movement: Items can be transferred between locations or assigned to employees, with detailed tracking and reasons for transfer.
+	•	Barcode Scanning & Manual Input: Supports both barcode scanning and manual entry of item details.
+	•	Location-Based Management: Real-time inventory tracking per location with instant updates on stock movements.
+	•	Low Stock Alerts: Get notified when stock reaches below a specified threshold.
+	•	Reporting & Audits: Admins can generate reports for item movements, stock levels, and transaction history.
+	•	Role-Based Access: Three roles - Admin, Inventory Keeper, and Salesman - with defined permissions.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Technologies Used
+	•	Backend: Laravel (PHP Framework)
+	•	Frontend: Vue.js (JavaScript Framework)
+	•	Database: MySQL (Dockerized for local development)
+	•	Barcode Scanning: Supports manual input and scanning for tracking items
+	•	Authentication: Role-based authentication (Admin, Inventory Keeper, Salesman)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Requirements
+	•	PHP >= 8.0
+	•	Composer
+	•	Node.js >= 14
+	•	npm
+	•	MySQL Database
 
-## Learning Laravel
+Installation
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Follow the steps below to set up the project locally.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+1. Clone the Repository
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+git clone https://github.com/yourusername/apexore-inventory.git
+cd apexore-inventory
 
-## Laravel Sponsors
+2. Set Up the Backend (Laravel)
+	•	Install the PHP dependencies:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+composer install
 
-### Premium Partners
+	•	Set up your .env file by copying the example:
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+cp .env.example .env
 
-## Contributing
+	•	Generate the application key:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+php artisan key:generate
 
-## Code of Conduct
+	•	Set up your database configurations in .env:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=your_database
+DB_USERNAME=your_username
+DB_PASSWORD=your_password
 
-## Security Vulnerabilities
+	•	Run the migrations to create the database schema:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+php artisan migrate
 
-## License
+3. Set Up the Frontend (Vue.js)
+	•	Install the Node.js dependencies:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+npm install
+
+	•	Build the Vue.js assets:
+
+npm run dev
+
+4. Run the Application
+	•	Start the Laravel server:
+
+php artisan serve
+
+	•	By default, the app will run at http://localhost:8000.
+	•	You can also use Docker for containerized environments. Make sure to configure the docker-compose.yml file.
+
+Usage
+	•	Access the system via your browser at http://localhost:8000.
+	•	Use the app based on your role:
+	•	Admin: Full access to all features, including item registration, movement, reporting, and user management.
+	•	Inventory Keeper: Can manage item movement, stock levels, and location assignments.
+	•	Salesman: Can view item details and movement but limited access to editing.
+
+Features Breakdown
+
+1. Item Registration
+
+Admins and Inventory Keepers can register new items, including:
+	•	Name, Category, M.A.C / Serial Number, Quantity, Location (HQ1, HQ2, Booth).
+	•	Barcode scan or manual entry for new stock.
+	•	Save and assign items to specific locations.
+
+2. Item Movement
+
+Inventory Keepers and Salesmen can:
+	•	Transfer items between locations (HQ1, HQ2, Booth).
+	•	Record transfer details (reason, date, and optional notes).
+	•	Assign items to employees with relevant details (holder name, purpose, expected return).
+
+3. Reporting & Audits
+
+Admins can:
+	•	Generate reports based on stock levels, item movements, and transaction history.
+	•	Export the data for further analysis.
+
+4. Low Stock Alerts
+
+When stock at a location falls below a threshold, notifications are sent to Inventory Keepers/Admins to restock.
+
+Contributing
+
+We welcome contributions to improve the system! Please fork the repository, create a new branch, and submit a pull request. Ensure your changes pass tests and follow the code style used in the project.
+
+For more information on how to contribute, see the contribution guidelines.
+
+License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+Acknowledgments
+	•	Laravel for the powerful backend framework.
+	•	Vue.js for creating a reactive and modern frontend interface.
+	•	All contributors and open-source communities.
+
+Feel free to adjust the README further to fit any additional details or requirements for your project!
