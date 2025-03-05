@@ -5,8 +5,8 @@
             <div class="logo-section">
                 <div class="logo-content">
                     <img src="" alt="Logo" class="company-logo fade-in">
-                    <h1 class="slide-in-left">Tech Concept</h1>
-                    <p class="slide-in-left-delay">The Future Of Technology</p>
+                    <h1 class="slide-in-left">Company Name</h1>
+                    <p class="slide-in-left-delay">Description</p>
                 </div>
             </div>
 
@@ -18,7 +18,7 @@
                         <p>Please sign in to continue</p>
                     </div>
                     
-                    <div v-if="error" class="alert scale-in">
+                    <div v-if="error" class="alert scale-in" style="color:red; font-size: small;">
                         {{ error }}
                     </div>
 
@@ -112,47 +112,92 @@ export default {
             }
         };
     },
+    created() {
+        // Ensure CSRF cookie is set
+        this.getCsrfCookie();
+    },
     methods: {
+        async getCsrfCookie() {
+            try {
+                await axios.get('/sanctum/csrf-cookie');
+            } catch (error) {
+                console.error('Failed to get CSRF cookie:', error);
+            }
+        },
         async handleLogin() {
             this.error = null;
             this.validationErrors = {};
             this.isLoading = true;
 
             try {
+                // First ensure we have the CSRF cookie
+                await this.getCsrfCookie();
+
+                // Attempt login
                 const response = await axios.post('/api/login', {
-                    username: this.formData.username,
+                    email: this.formData.username,
                     password: this.formData.password,
                     remember_me: this.formData.rememberMe
+                }, {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    withCredentials: true // Important for cookies
                 });
 
-                if (response.data.token) {
-                    localStorage.setItem('token', response.data.token);
-                    
-                    // Redirect based on user role
-                    switch (response.data.user.role) {
-                        case 'admin':
+                if (response.data.success) {
+                    // Store user info in Vuex or local storage if needed
+                    if (response.data.user) {
+                        localStorage.setItem('user', JSON.stringify(response.data.user));
+                    }
+
+                    // Set auth token if provided
+                    if (response.data.token) {
+                        localStorage.setItem('token', response.data.token);
+                        axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
+                    }
+                    // Handle role-based redirect
+                    const role = response.data.user?.role || 'user';
+                    switch (role) {
+                        case 'Admin':
                             this.$router.push('/admin/dashboard');
                             break;
-                        case 'inventory':
+                        case 'Inventory':
                             this.$router.push('/inventory/dashboard');
                             break;
-                        case 'sales':
+                        case 'Sales':
                             this.$router.push('/sales/dashboard');
                             break;
                         default:
-                            this.$router.push('/dashboard');
+                            this.$router.push('/not-authorized');
+                            break;
                     }
+
                 }
             } catch (err) {
-                this.loginAttempts++;
-                
-                if (this.loginAttempts >= 5) {
+                if (err.response?.status === 419) {
+                    // CSRF token mismatch, try to get a new token and retry login
+                    await this.getCsrfCookie();
+                    this.handleLogin();
+                    return;
+                }
+
+                if (err.response?.status === 422) {
+                    // Validation errors
+                    this.validationErrors = err.response.data.errors;
+                } else if (err.response?.status === 429) {
+                    // Rate limiting
                     this.error = 'Too many login attempts. Please try again later.';
-                    setTimeout(() => this.loginAttempts = 0, 300000); // Reset after 5 minutes
-                } else if (err.response) {
-                    this.error = err.response.data.message || 'Invalid username or password';
                 } else {
-                    this.error = 'An error occurred. Please try again.';
+                    this.loginAttempts++;
+                    
+                    if (this.loginAttempts >= 5) {
+                        this.error = 'Too many login attempts. Please try again later.';
+                        setTimeout(() => this.loginAttempts = 0, 300000);
+                    } else {
+                        this.error = err.response?.data?.message || 'Invalid credentials';
+                    }
                 }
             } finally {
                 this.isLoading = false;

@@ -1,7 +1,8 @@
 import { createApp } from 'vue';
-import Login from './components/Login.vue';
+import App from './App.vue';
 import '@fontsource/inter';
+import router from './router';
 
-const app = createApp(Login);
-app.component('my-page-component', Login);
+const app = createApp(App);
+app.use(router);
 app.mount('#app');
