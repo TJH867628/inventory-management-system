@@ -1,6 +1,4 @@
-Here’s a README template for your Laravel + Vue.js-based inventory management system:
-
-ApexOre Inventory Management System
+Inventory Management System
 
 A robust inventory management solution designed for global enterprises, built with Laravel and Vue.js. This system enables seamless tracking of items across multiple locations, including headquarters, fair booths, and between employees. The system supports barcode scanning, manual input, item registration, movement, and reporting.
 
